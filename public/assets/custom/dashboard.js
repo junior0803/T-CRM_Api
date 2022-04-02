@@ -23,6 +23,12 @@ const Dashboard = {
             '</tr>');
         $('.dz-image-preview').remove();
     },
+    clearSearch : () => {
+        $('#search_form').find("input[type=text] , textarea ").each(function() {
+            $(this).val('');
+        });
+        $('#search_form').submit();
+    },
     preview1 : () => {
         frame1.src = URL.createObjectURL(event.target.files[0]);
     },
@@ -95,7 +101,14 @@ const Dashboard = {
                         $('#invoice_body').html('<tr id="invoice_nodata">\n' +
                             '   <td colspan="2" class="text-center" >No Data</td>\n' +
                             '</tr>');
-                    }
+                    };
+                    setTimeout(function(){
+                        $('.dz-image-preview').click(function (){
+                            window.open($($(this).children().first().children().first()).attr('src'),'blank');
+                        });    
+                    },100);
+                    
+
                     // $('#category').val(response.customer.category_id).change();
                     $('#categoryModal').modal('show');
                 }
@@ -320,6 +333,7 @@ const Dashboard = {
 let dropzoneInstance;
 Dropzone.autoDiscover = false;
 $(document).ready(function(){
+
     $('#import_file_btn').change(function (){
         $('#customer_csv_form').submit();
     });
@@ -329,10 +343,29 @@ $(document).ready(function(){
     $('#search_status').change(function (){
         $('#search_form').submit();
     });
+    $('#search_customer').blur(function (){
+        $('#search_form').submit();
+    })
     $('#search_category').change(function (){
         $('#search_form').submit();
     });
-    $('.date-picker').datetimepicker();
+    $('#search_date_from').change(function (){
+        $('#search_form').submit();
+    });
+    $('#search_date_to').change(function (){
+        $('#search_form').submit();
+    });
+
+    $('.date-picker').datepicker({
+            dateFormat: "dd/mm/yy",
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            autoclose: true,
+            changeMonth: true,
+            changeYear: true,
+            orientation: "bottom left" // left bottom of the input field
+    });
+
     let originFile;
     $("#my-dropzone").dropzone({
         url: "/customer/attach_file", // If not using a form element
@@ -364,4 +397,6 @@ $(document).ready(function(){
             $('#hid_attached_files').val(JSON.stringify(temp));
         },
     });
+   
+
 })

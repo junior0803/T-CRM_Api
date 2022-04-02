@@ -80,6 +80,11 @@ Route::get('/pdfInvoiceExport/{id}','\App\Http\Controllers\InvoiceController@pdf
 Route::any('/invoice/logo_file','\App\Http\Controllers\FileController@uploadInvoiceLogo');
 Route::get('/getAllAttach','\App\Http\Controllers\CustomerController@getAllAttach');
 
+Route::any('/attach_file','\App\Http\Controllers\FileController@uploadAttach');
+Route::any('/get_attach_files','\App\Http\Controllers\FileController@get_attach_files');
+Route::any('/delete_attach_file','\App\Http\Controllers\FileController@delete_attach_file');
+
+
 Route::get('/register',function (){
     return view('register');
 });

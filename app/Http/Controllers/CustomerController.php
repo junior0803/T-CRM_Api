@@ -13,6 +13,7 @@ class CustomerController extends Controller
         $search = $request->get('search',[]);
         $categories = CategoriesModel::get();
         $results = DB::table('customers');
+
         if (!empty($search['title'])){
             $results = $results->where('title','like',"%{$search['title']}%");
         }
@@ -24,10 +25,10 @@ class CustomerController extends Controller
         }
 
         if (!empty($search['date_from'])){
-            $results = $results->where('created_at','>',"{$search['date_from']}");
+            $results = $results->where('created_at','>=',"{$search['date_from']}");
         }
         if (!empty($search['date_to'])){
-            $results = $results->where('created_at','<',"{$search['date_to']}");
+            $results = $results->where('created_at','=<',"{$search['date_to']}");
         }
         $results = $results->get();
         return view('dashboard',['results'=>$results,'categories'=>$categories,'search'=>$search]);
@@ -190,8 +191,6 @@ class CustomerController extends Controller
             $temp['remind_date'] = $line[10] == ''? null: $line[10];
             $temp['category_id'] = $line[11];
             $temp['attached_files'] = $line[12];
-            $temp['created_at'] = $line[13];
-            $temp['updated_at'] = $line[14] == ''? null: $line[14];
             DB::table('customers')->insert($temp);
         }
 
@@ -285,7 +284,7 @@ class CustomerController extends Controller
             $temp = [];
             $temp['invoice_no'] = $line[1];
             $temp['email']  = $line[2];
-            $temp['invoice_date'] = $line[3] == '' ? 0 : $line[3];
+            $temp['invoice_date'] = $line[3] == '' ? date('Y-m-d H:i:s') : $line[3];
             $temp['mobile_num'] = $line[4];
             $temp['to'] = $line[5];
             $temp['from_address'] = $line[6];
@@ -297,12 +296,6 @@ class CustomerController extends Controller
             $temp['due_total'] = $line[12] == '' ? 0 : $line[12];
             $temp['comment'] = $line[13];
             $temp['customer_id'] = $line[14];
-            if (!empty($line[15])){
-                $temp['created_at'] = $line[15] == '' ? null : $line[15];
-            }
-            if (!empty($line[16])){
-                $temp['updated_at'] = $line[16] == '' ? null : $line[16];
-            }
             DB::table('invoice')->insert($temp);
         }
 

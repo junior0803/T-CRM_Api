@@ -38,3 +38,6 @@
     margin-top: -0.7rem;
     margin-left: 0;
 }
+.dz-preview {
+    cursor: pointer;
+}

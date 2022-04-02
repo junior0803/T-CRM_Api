@@ -42,7 +42,12 @@ class PartsController extends Controller
         if (empty($record)){
             return response()->json('no_data',400);
         }
+
         PartsModel::find($id)->update($record);
+        if(($record['is_shopping'] == 0) && ($record['mq'] > $record['q'])){
+            $record['is_shopping'] = 1;
+            PartsModel::insert($record);
+        }
         return response()->json(PartsModel::all());
     }
 
@@ -65,13 +70,24 @@ class PartsController extends Controller
         if (empty($record)){
             return response()->json('no_record',400);
         }
+
         PartsModel::insert($record);
+        if(($record['is_shopping'] == 0) && ($record['mq'] > $record['q'])){
+            $record['is_shopping'] = 1;
+            PartsModel::insert($record);
+        }
         return response()->json('success');
     }
 
 
-    public function exportParts(){
-        $parts = DB::table('parts')->get()->toArray();
+    public function exportParts(Request $request){
+        $type = $request->get('type');
+        $isShopping = $request->get('is_shopping');
+        $parts = DB::table('parts')
+            ->where('type',$type)
+            ->where('is_shopping',$isShopping)
+            ->get()
+            ->toArray();
         $delimiter = ",";
         $filename = "parts_" . date('Y-m-d') . ".csv";
 
@@ -118,6 +134,8 @@ class PartsController extends Controller
 
     public function importParts(Request $request)
     {
+        $type = $request->get('type');
+        $isShopping = $request->get('is_shopping');
         $csv = $request->file('file');
         $realPath = $csv->getRealPath();
         // Open uploaded CSV file with read-only mode
@@ -136,8 +154,8 @@ class PartsController extends Controller
             $temp['mq'] = $line[1];
             $temp['description'] = $line[2];
             $temp['pno'] = $line[3];
-            $temp['is_shopping'] = $line[4];
-            $temp['type'] = $line[5];
+            $temp['is_shopping'] = $isShopping;
+            $temp['type'] = $type;
             DB::table('parts')->insert($temp);
         }
 
