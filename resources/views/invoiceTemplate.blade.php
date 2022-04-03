@@ -1,7 +1,7 @@
 <?php
 function convertStandardTime($input){
     $time = strtotime($input);
-    return date('d/m/Y H:i:s',$time);
+    return date('m/d/Y',$time);
 }
 
 ?>
