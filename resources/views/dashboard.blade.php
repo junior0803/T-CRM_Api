@@ -41,8 +41,8 @@
                                 <option value="{{$category->id}}" {{!empty($search['category'])&&$search['category'] == $category->id ? 'selected':''}}>{{$category->name}}</option>
                             @endforeach
                         </select>
-                        <input type="text" class="form-control date-picker" style="width: 150px" id="search_date_from" placeholder="Date From" name="search[date_from]" value="{{$search['date_from']?? ''}}">
-                        <input type="text" class="form-control date-picker" style="width: 150px" id="search_date_to" placeholder="Date To" name="search[date_to]" value="{{$search['date_to']?? ''}}">
+                        <input type="text" class="form-control date-picker" style="width: 150px" id="search_date_from" placeholder="Date From" name="search[date_from]" autocomplete="off" value="{{$search['date_from']?? ''}}">
+                        <input type="text" class="form-control date-picker" style="width: 150px" id="search_date_to" placeholder="Date To" name="search[date_to]" autocomplete="off" value="{{$search['date_to']?? ''}}">
                     </form>
                 </div>
             </h3>
@@ -86,7 +86,7 @@
                                 <td>{{$result->email}}</td>
                                 <td>{{$result->mobile_phone}}</td>
                                 <td>{{$result->name}}</td>
-                                <td>{{$result->created_at}}</td>
+                                <td>{{date('m/d/Y H:i:s',strtotime($result->created_at))}}</td>
                                 <td class="text-center">
                                     <input type="hidden" id='customer_{{$result->id}}' value="@json($result)">
                                     <button type="button" class="btn btn-sm btn-outline-success" title="Edit" onclick="Dashboard.editCustomer({{$result->id}})"><i class="mdi mdi-pencil menu-icon"></i></button>

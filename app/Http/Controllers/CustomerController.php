@@ -25,10 +25,12 @@ class CustomerController extends Controller
         }
 
         if (!empty($search['date_from'])){
-            $results = $results->where('created_at','>=',"{$search['date_from']}");
+            $date_from = date('Y-m-d',strtotime($search['date_from']));
+            $results = $results->where('created_at','>=',"{$date_from}");
         }
         if (!empty($search['date_to'])){
-            $results = $results->where('created_at','=<',"{$search['date_to']}");
+            $date_to = date('Y-m-d',strtotime($search['date_to']));
+            $results = $results->where('created_at','<=',"{$date_to}");
         }
         $results = $results->get();
         return view('dashboard',['results'=>$results,'categories'=>$categories,'search'=>$search]);
@@ -188,9 +190,11 @@ class CustomerController extends Controller
             $temp['postal_code'] = $line[7];
             $temp['further_note'] = $line[8];
             $temp['state'] = $line[9];
-            $temp['remind_date'] = $line[10] == ''? null: $line[10];
+            $temp['remind_date'] = $line[10] == ''? null: date('Y-m-d H:i:s',strtotime($line[10]));
             $temp['category_id'] = $line[11];
             $temp['attached_files'] = $line[12];
+            $temp['created_at'] = $line[13] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[13]));
+            $temp['updated_at'] = $line[14] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[14]));
             DB::table('customers')->insert($temp);
         }
 
@@ -296,6 +300,8 @@ class CustomerController extends Controller
             $temp['due_total'] = $line[12] == '' ? 0 : $line[12];
             $temp['comment'] = $line[13];
             $temp['customer_id'] = $line[14];
+            $temp['created_at'] = $line[15] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[15]));
+            $temp['updated_at'] = $line[16] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[16]));
             DB::table('invoice')->insert($temp);
         }
 

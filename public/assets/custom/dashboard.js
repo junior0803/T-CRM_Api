@@ -105,9 +105,9 @@ const Dashboard = {
                     setTimeout(function(){
                         $('.dz-image-preview').click(function (){
                             window.open($($(this).children().first().children().first()).attr('src'),'blank');
-                        });    
+                        });
                     },100);
-                    
+
 
                     // $('#category').val(response.customer.category_id).change();
                     $('#categoryModal').modal('show');
@@ -357,7 +357,7 @@ $(document).ready(function(){
     });
 
     $('.date-picker').datepicker({
-            dateFormat: "dd/mm/yy",
+            format : "mm/dd/yyyy",
             showOtherMonths: true,
             selectOtherMonths: true,
             autoclose: true,
@@ -397,6 +397,6 @@ $(document).ready(function(){
             $('#hid_attached_files').val(JSON.stringify(temp));
         },
     });
-   
+
 
 })
