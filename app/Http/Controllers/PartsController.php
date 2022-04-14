@@ -18,12 +18,21 @@ class PartsController extends Controller
      * @param Request $request
      * @return Application|Factory|View
      */
-    public function index($type, $is_shopList){
-        $results = PartsModel::where('type',$type)->where('is_shopping',$is_shopList)->get();
+    public function index($type, $is_shopList, Request $request){
+        $search = $request->get('search',[]);
+        $results = PartsModel::where('type',$type)->where('is_shopping',$is_shopList);
+        if (!empty($search['title'])){
+            $results = $results->where('description','like',"%{$search['title']}%");
+        }
+        if (!empty($search['pno'])){
+            $results = $results->where('pno','like',"%{$search['pno']}%");
+        }
+        $results = $results->get();
         return view('parts',[
             'results'=>$results,
             'type'=>$type,
-            'is_shop'=>$is_shopList
+            'is_shop'=>$is_shopList,
+            'search'=>$search
         ]);
     }
 

@@ -70,7 +70,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Mobile Number</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Created At</th>
+                    <th scope="col">Updated At</th>
                     <th scope="col" class="text-center">Control</th>
                 </tr>
                 </thead>
@@ -86,7 +86,7 @@
                                 <td>{{$result->email}}</td>
                                 <td>{{$result->mobile_phone}}</td>
                                 <td>{{$result->name}}</td>
-                                <td>{{date('m/d/Y H:i:s',strtotime($result->created_at))}}</td>
+                                <td>{{date('d/m/Y',strtotime($result->updated_at ?? date('Y-m-d')))}}</td>
                                 <td class="text-center">
                                     <input type="hidden" id='customer_{{$result->id}}' value="@json($result)">
                                     <button type="button" class="btn btn-sm btn-outline-success" title="Edit" onclick="Dashboard.editCustomer({{$result->id}})"><i class="mdi mdi-pencil menu-icon"></i></button>
@@ -98,7 +98,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="7" class="text-center"> No Data</td>
+                            <td colspan="8" class="text-center"> No Data</td>
                         </tr>
                     @endif
 
@@ -243,16 +243,16 @@
                                 <input type="text" class="form-control form-control-md" name="data[email]" id="invoice_email" placeholder="Email">
                             </div>
                             <div class="form-group">
-                                <input type="datetime-local" class="form-control form-control-md" name="data[invoice_date]" id="invoice_date" placeholder="invoice Date">
+                                <input type="text" class="form-control form-control-md date-picker" name="data[invoice_date]" id="invoice_date" placeholder="invoice Date">
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-md" name="data[mobile_num]" id="invoice_mobile_num"  placeholder="Mobile Number">
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-md" name="data[to]" id="invoice_to" placeholder="to">
+                                <textarea rows="5" class="form-control form-control-md" name="data[to]" id="invoice_to" placeholder="to"></textarea>
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-md" name="data[from_address]" id="invoice_from_addr" placeholder="from address">
+                                <textarea rows="5" class="form-control form-control-md" name="data[from_address]" id="invoice_from_addr" placeholder="from address"></textarea>
                             </div>
                             <div class="form-group">
                                 <input type="hidden" id="hid_invoice_items" name="data[items]" value="[]">

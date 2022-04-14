@@ -1,7 +1,10 @@
 <?php
 function convertStandardTime($input){
+    if(empty($input)){
+        $input = date('Y-m-d H:i:s');
+    }
     $time = strtotime($input);
-    return date('m/d/Y',$time);
+    return date('d/m/Y',$time);
 }
 
 ?>
@@ -24,14 +27,12 @@ function convertStandardTime($input){
         </tr>
     </table>
     <div >
-        <div style="text-align: left;line-height: 10px;">
-            <h4>{{$invoiceData->from_address}}</h4>
-            <h4>{{$invoiceData->to}}</h4>
-            <h4>{{$invoiceData->excluding_vat}}</h4>
-            <br>
+        <div style="text-align: left;line-height: 12px;">
+            <h4>{!! nl2br($invoiceData->from_address) !!}</h4>
             <h4>Mail : {{$invoiceData->email}}</h4>
             <h4>Mobile : {{$invoiceData->mobile_num}}</h4>
-            <h4>To : <br>{{$invoiceData->to}}</h4>
+            <br>
+            <h4>To : <br>{!! nl2br($invoiceData->to) !!}</h4>
         </div>
         <table style="width: 100%;">
             <tr>

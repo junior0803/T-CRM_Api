@@ -26,11 +26,11 @@ class CustomerController extends Controller
 
         if (!empty($search['date_from'])){
             $date_from = date('Y-m-d',strtotime($search['date_from']));
-            $results = $results->where('created_at','>=',"{$date_from}");
+            $results = $results->where('updated_at','>=',"{$date_from}");
         }
         if (!empty($search['date_to'])){
             $date_to = date('Y-m-d',strtotime($search['date_to']));
-            $results = $results->where('created_at','<=',"{$date_to}");
+            $results = $results->where('updated_at','<=',"{$date_to}");
         }
         $results = $results->get();
         return view('dashboard',['results'=>$results,'categories'=>$categories,'search'=>$search]);
@@ -61,10 +61,10 @@ class CustomerController extends Controller
         }
 
         if (!empty($search['date_from'])){
-            $results = $results->where('created_at','>',"{$search['date_from']}");
+            $results = $results->where('updated_at','>',"{$search['date_from']}");
         }
         if (!empty($search['date_to'])){
-            $results = $results->where('created_at','<',"{$search['date_to']}");
+            $results = $results->where('updated_at','<',"{$search['date_to']}");
         }
         $results = $results->get();
         return response()->json($results);
@@ -75,6 +75,9 @@ class CustomerController extends Controller
         $record = $request->get('data',[]);
         $invoiceIds = $record['invoiceIds']??[];
         unset($record['invoiceIds']);
+        if (empty($record['updated_at'])) {
+            $record['updated_at'] = date('Y-m-d H:i:s');
+        }
         $resultId = DB::table('customers')->insertGetId($record);
         DB::table('invoice')->whereIn('id',$invoiceIds)->update(['customer_id'=>$resultId]);
         return response()->json($resultId);

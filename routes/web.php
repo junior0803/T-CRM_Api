@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/updateUser','\App\Http\Controllers\UserController@updateUser');
     Route::get('/deleteUser/{id}','\App\Http\Controllers\UserController@deleteUser');
     Route::get('/api/userList','\App\Http\Controllers\UserController@getUserList');
-    Route::get('/parts/{type}/{is_shop}','\App\Http\Controllers\PartsController@index');
+    Route::any('/parts/{type}/{is_shop}','\App\Http\Controllers\PartsController@index');
 
 
 

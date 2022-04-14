@@ -21,6 +21,12 @@ const Part = {
             }
         });
     },
+    clearSearch : () => {
+        $('#search_form').find("input[type=text] , textarea ").each(function() {
+            $(this).val('');
+        });
+        $('#search_form').submit();
+    },
     editItem: (id) => {
         if (!id){
             return 'no_id'
@@ -60,5 +66,11 @@ const Part = {
 $(document).ready(function(){
     $('#import_file_btn').change(function (){
         $('#parts_form').submit();
+    });
+    $('#search_customer').change(function (){
+        $('#search_form').submit();
+    });
+    $('#search_mq').change(function (){
+        $('#search_form').submit();
     });
 })

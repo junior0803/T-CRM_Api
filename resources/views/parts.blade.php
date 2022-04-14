@@ -19,11 +19,33 @@
                 </ul>
             </nav>
         </div>
+
+        <div class="page-header">
+            <h3 class="page-title">
+                <div class="form-inline">
+                    <form action="{{url()->current()}}" method="post" id="search_form">
+                        <input type="text" class="form-control" id="search_customer" placeholder="Description" name="search[title]" value="{{$search['title']?? ''}}">
+                        <input type="text" class="form-control" id="search_mq" placeholder="PNO" name="search[pno]" value="{{$search['pno']?? ''}}">
+                    </form>
+                </div>
+            </h3>
+            <nav aria-label="breadcrumb" style="margin-left: auto;">
+                <ul class="breadcrumb">
+                    <button type="button" class="btn btn-sm btn-outline-behance" onclick="Part.clearSearch()"><i class="mdi mdi-erase menu-icon"></i>clear</button>
+                </ul>
+            </nav>
+            <nav aria-label="breadcrumb">
+                <ul class="breadcrumb">
+                    <button type="button" class="btn btn-sm btn-outline-behance" onclick="$('#search_form').submit()"><i class="mdi mdi-search-web menu-icon"></i>Search</button>
+                </ul>
+            </nav>
+
+        </div>
         <div class="row">
             <table class="table table-striped table-light">
                 <thead>
-                <tr>
-                    <th scope="col">
+                <tr class="text-center">
+                    <th scope="col" class="text-start">
                         <input class="form-check-input" type="checkbox" value="" onchange="toggleCheckBox(this)" aria-label="...">
                     </th>
                     <th scope="col">Q</th>
@@ -39,8 +61,8 @@
                         $i=1;
                     @endphp
                     @foreach($results as $result)
-                        <tr>
-                            <td>
+                        <tr class="text-center">
+                            <td class="text-start">
                                 <input class="form-check-input" type="checkbox" value="{{$result->id}}" aria-label="...">
                             </td>
                             <th scope="row">{{$result->q}}</th>
@@ -59,7 +81,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="5" class="text-center"> No Data</td>
+                        <td colspan="6" class="text-center"> No Data</td>
                     </tr>
                 @endif
                 </tbody>
