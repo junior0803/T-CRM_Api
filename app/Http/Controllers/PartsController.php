@@ -90,13 +90,20 @@ class PartsController extends Controller
 
 
     public function exportParts(Request $request){
-        $type = $request->get('type');
-        $isShopping = $request->get('is_shopping');
+        $uri = $request->getRequestUri();
+        $temp = explode('?',$uri);
+        $t = explode('&',$temp[1]);
+        $type = explode('=',$t[0])[1];
+        $isShopping = explode('=',$t[1])[1];
+        // $type = $request->get('type');
+        // $isShopping = $request->get('is_shopping');
+
         $parts = DB::table('parts')
             ->where('type',$type)
             ->where('is_shopping',$isShopping)
             ->get()
             ->toArray();
+        
         $delimiter = ",";
         $filename = "parts_" . date('Y-m-d') . ".csv";
 
@@ -143,8 +150,13 @@ class PartsController extends Controller
 
     public function importParts(Request $request)
     {
-        $type = $request->get('type');
-        $isShopping = $request->get('is_shopping');
+          $uri = $request->getRequestUri();
+        $temp = explode('?',$uri);
+        $t = explode('&',$temp[1]);
+        $type = explode('=',$t[0])[1];
+        $isShopping = explode('=',$t[1])[1];
+        // $type = $request->get('type');
+        // $isShopping = $request->get('is_shopping');
         $csv = $request->file('file');
         $realPath = $csv->getRealPath();
         // Open uploaded CSV file with read-only mode

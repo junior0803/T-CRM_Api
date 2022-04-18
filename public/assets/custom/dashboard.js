@@ -92,6 +92,9 @@ const Dashboard = {
                     if (response.invoices.length > 0){
                         let html = '';
                         for (let tmp of response.invoices){
+                            tmp.created_at = '';
+                            tmp.updated_at = '';
+
                             html += '<tr id="invoice_row_'+tmp.id+'"><th scope="row"><i class="mdi mdi-close text-danger" style="cursor: pointer" onclick="Dashboard.deleteInvoice('+tmp.id+')"></i></th> <td class="cursor-pointer" onclick="Dashboard.editInvoice('+tmp.id+')"><input type="hidden" id="invoiceData_'+tmp.id+'" value='+"'"+JSON.stringify(tmp).replace(/'/g,"\'")+ "'" +'><input type="hidden" name="data[invoiceIds]['+tmp.id+']" value="'+tmp.id+'">'+tmp.invoice_no+'</td></tr>';
                         }
                         $('#invoice_nodata').remove();
@@ -147,23 +150,26 @@ const Dashboard = {
         $('#hid_invoice_id').val(invoiceItemId);
         $('#invoice_item_body').html('');
         let html = '';
-        let parsed = JSON.parse(invoiceItem.items);
-        let i= 0;
-        for (let item of parsed){
-            html += '<tr>'+
-                '<th scope="row"><i class="mdi mdi-close text-danger" style="cursor: pointer" onclick="$(this).parent().parent().remove();Dashboard.removeInvoiceItem('+i+');"></i></th>'+
-                '<td  class="cursor-pointer" onclick="Dashboard.editInvoiceItem('+i+');">'+item.quantity+'</td>'+
-                '<td  class="cursor-pointer" onclick="Dashboard.editInvoiceItem('+i+');">'+item.description+'</td>'+
-                '<td  class="cursor-pointer" onclick="Dashboard.editInvoiceItem('+i+');">'+item.price+'</td>'+
-                '</tr>';
-            i++;
+        if(!invoiceItem.items){
+            let parsed = JSON.parse(invoiceItem.items);
+            let i= 0;
+            for (let item of parsed){
+                html += '<tr>'+
+                    '<th scope="row"><i class="mdi mdi-close text-danger" style="cursor: pointer" onclick="$(this).parent().parent().remove();Dashboard.removeInvoiceItem('+i+');"></i></th>'+
+                    '<td  class="cursor-pointer" onclick="Dashboard.editInvoiceItem('+i+');">'+item.quantity+'</td>'+
+                    '<td  class="cursor-pointer" onclick="Dashboard.editInvoiceItem('+i+');">'+item.description+'</td>'+
+                    '<td  class="cursor-pointer" onclick="Dashboard.editInvoiceItem('+i+');">'+item.price+'</td>'+
+                    '</tr>';
+                i++;
+            }
+            if (html === ''){
+                html = ' <tr>\n' +
+                    '      <td colspan="4" class="text-center">No data</td>\n' +
+                    '    </tr>';
+            }
+            $('#invoice_item_body').html(html);
         }
-        if (html === ''){
-            html = ' <tr>\n' +
-                '      <td colspan="4" class="text-center">No data</td>\n' +
-                '    </tr>';
-        }
-        $('#invoice_item_body').html(html);
+
         $('#invoiceModal').modal('show');
     },
     removeInvoiceItem : (index) => {
@@ -191,6 +197,7 @@ const Dashboard = {
         $('#invoiceItemModal').modal('show');
     },
     addInvoice : () => {
+        $('#invoice_form')[0].reset();
         $('#hid_invoice_mode').val('add');
         $('#categoryModal').modal('hide');
         $('#invoiceModal').modal('show');
@@ -248,6 +255,8 @@ const Dashboard = {
             processData: false,
             contentType: false,
             success: (response)=> {
+                response.created_at = '';
+                response.updated_at ='';
                 let html = '<tr id="invoice_row_'+response.id+'"><th scope="row"><i class="mdi mdi-close text-danger" style="cursor: pointer" onclick="Dashboard.deleteInvoice('+response.id+')"></i></th> <td class="cursor-pointer" onclick="Dashboard.editInvoice('+response.id+')"><input type="hidden" id="invoiceData_'+response.id+'" value='+JSON.stringify(response)+'><input type="hidden" name="data[invoiceIds]['+response.id+']" value="'+response.id+'">'+response.result.invoice_no+'</td></tr>';
                 $('#invoice_nodata').remove();
                 let mode = $('#hid_invoice_mode').val();

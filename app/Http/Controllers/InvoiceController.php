@@ -30,11 +30,19 @@ class InvoiceController extends Controller
         if (empty($record)){
             return response()->json('no_data',400);
         }
+        if (!empty($record['invoice_date'])) {
+            $record['invoice_date'] = date('Y-m-d H:i:s',strtotime($record['invoice_date']));
+        }
+        else {
+            $record['invoice_date'] = date('Y-m-d H:i:s');
+        }
         if ($mode === 'add'){
             $record['created_at'] = date('Y-m-d H:i:s');
+            $record['updated_at'] = date('Y-m-d H:i:s');
             $id = DB::table('invoice')->insertGetId($record);
         }
         else {
+            $record['updated_at'] = date('Y-m-d H:i:s');
             DB::table('invoice')->where('id',$id)->update($record);
         }
         $result = [
@@ -50,9 +58,9 @@ class InvoiceController extends Controller
         $invoiceData = DB::table('invoice')->find($id);
 
         $diff = date_diff(date_create($invoiceData->created_at),date_create(date('Y-m-d H:i:s')));
-        if ($diff->days > 7){
-            return response()->json('The period for viewing the PDF has expired.',400);
-        }
+        // if ($diff->days > 7){
+        //     return response()->json('The period for viewing the PDF has expired.',400);
+        // }
         // usersPdf is the view that includes the downloading content
         $view = \View::make('invoiceTemplate', ['invoiceData'=>$invoiceData]);
         $html_content = $view->render();

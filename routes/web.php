@@ -50,14 +50,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export_customers','\App\Http\Controllers\CustomerController@exportCustomers');
     Route::get('/export_categories','\App\Http\Controllers\CategoryController@exportCategories');
     Route::get('/export_invoices','\App\Http\Controllers\CustomerController@exportInvoices');
-    Route::get('/export_parts','\App\Http\Controllers\PartsController@exportParts');
     Route::post('/import_customers','\App\Http\Controllers\CustomerController@importCustomers');
     Route::post('/import_invoices','\App\Http\Controllers\CustomerController@importInvoices');
     Route::post('/import_categories','\App\Http\Controllers\CategoryController@importCategories');
-    Route::post('/import_parts','\App\Http\Controllers\PartsController@importParts');
+
 
 });
 
+Route::get('/export_parts','\App\Http\Controllers\PartsController@exportParts');
+Route::post('/import_parts','\App\Http\Controllers\PartsController@importParts');
 Route::get('/getInvoiceList/{id}','\App\Http\Controllers\InvoiceController@getInvoiceList');
 Route::post('/insertCategory','\App\Http\Controllers\CategoryController@createCategory');
 Route::post('/updateCategory','\App\Http\Controllers\CategoryController@updateItem');

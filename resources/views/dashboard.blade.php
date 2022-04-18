@@ -243,7 +243,7 @@
                                 <input type="text" class="form-control form-control-md" name="data[email]" id="invoice_email" placeholder="Email">
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-md date-picker" name="data[invoice_date]" id="invoice_date" placeholder="invoice Date">
+                                <input type="text" readonly autocomplete="off" class="form-control form-control-md date-picker" name="data[invoice_date]" id="invoice_date" placeholder="invoice Date">
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-md" name="data[mobile_num]" id="invoice_mobile_num"  placeholder="Mobile Number">
