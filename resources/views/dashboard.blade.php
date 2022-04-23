@@ -82,7 +82,7 @@
                                     <input class="form-check-input" type="checkbox" value="{{$result->id}}" aria-label="...">
                                 </td>
                                 <th scope="row">{{$key+1}}</th>
-                                <td>{{$result->title}}</td>
+                                <td style="max-width: 200px; overflow: hidden;text-overflow: ellipsis;">{{$result->title}}</td>
                                 <td>{{$result->email}}</td>
                                 <td>{{$result->mobile_phone}}</td>
                                 <td>{{$result->name}}</td>

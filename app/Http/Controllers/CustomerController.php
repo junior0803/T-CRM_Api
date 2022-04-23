@@ -117,7 +117,6 @@ class CustomerController extends Controller
         $f = fopen('php://memory', 'w');
         // Set column headers
         $fields = array(
-            'CUSTOMER_ID',
             'TITLE',
             'MOBILE PHONE',
             'EMAIL',
@@ -138,9 +137,8 @@ class CustomerController extends Controller
         // Output each row of the data, format line as csv and write to file pointer
         foreach ($customers as $customer){
             $lineData = array(
-                $customer->id,
                 $customer->title,
-                $customer->mobile_phone,
+                $customer->mobile_phone ? substr($customer->mobile_phone,0,strlen($customer->mobile_phone)-1).' '.substr($customer->mobile_phone,-1,1) : '',
                 $customer->email,
                 $customer->name,
                 $customer->address,
@@ -184,20 +182,21 @@ class CustomerController extends Controller
 
             // Get row data
             $temp = [];
-            $temp['title'] = $line[1];
-            $temp['mobile_phone'] = $line[2];
-            $temp['email']  = $line[3];
-            $temp['name'] = $line[4];
-            $temp['address'] = $line[5];
-            $temp['town'] = $line[6];
-            $temp['postal_code'] = $line[7];
-            $temp['further_note'] = $line[8];
-            $temp['state'] = $line[9];
-            $temp['remind_date'] = $line[10] == ''? null: date('Y-m-d H:i:s',strtotime($line[10]));
-            $temp['category_id'] = $line[11];
-            $temp['attached_files'] = $line[12];
-            $temp['created_at'] = $line[13] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[13]));
-            $temp['updated_at'] = $line[14] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[14]));
+            $tempMobile = explode(' ',$line[1]);
+            $temp['title'] = $line[0];
+            $temp['mobile_phone'] = $line[1] ? (count($tempMobile) > 1 ? $tempMobile[0].$tempMobile[1] : $tempMobile[0] ) : '';
+            $temp['email']  = $line[2];
+            $temp['name'] = $line[3];
+            $temp['address'] = $line[4];
+            $temp['town'] = $line[5];
+            $temp['postal_code'] = $line[6];
+            $temp['further_note'] = $line[7];
+            $temp['state'] = $line[8];
+            $temp['remind_date'] = $line[9] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[9]));
+            $temp['category_id'] = $line[10] ?? 0;
+            $temp['attached_files'] = $line[11];
+            $temp['created_at'] = $line[12] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[12]));
+            $temp['updated_at'] = $line[13] == ''? date('Y-m-d H:i:s'): date('Y-m-d H:i:s',strtotime($line[13]));
             DB::table('customers')->insert($temp);
         }
 
